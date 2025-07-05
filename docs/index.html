@@ -9,7 +9,7 @@
     function updateDownloadLink() {
       const version = document.getElementById('version-select').value;
       const link = document.getElementById('download-link');
-      link.href = `assets/pkg/macos/IMAGEimage_${version}.zip`;
+      link.href = `assets/pkg/macos/IMAGEimage_${version}.dmg`;
       link.textContent = `Mac版ダウンロード（v${version}）`;
     }
     window.addEventListener('DOMContentLoaded', updateDownloadLink);

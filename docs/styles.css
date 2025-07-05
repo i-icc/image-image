@@ -99,7 +99,7 @@ body {
 .appstore-screenshot {
   width: 180px;
   height: 320px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px;
   background: #ddd;
   border: 1px solid #e0e0e0;
