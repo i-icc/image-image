@@ -1,0 +1,99 @@
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #fff;
+  margin: 0;
+  color: #222;
+}
+.appstore-header {
+  display: flex;
+  align-items: flex-start;
+  padding: 32px 0 16px 0;
+  max-width: 900px;
+  margin: 0 auto;
+  border-bottom: 1px solid #e0e0e0;
+}
+.appstore-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  background: #eee;
+  margin-right: 32px;
+}
+.appstore-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.appstore-title {
+  margin: 0 0 8px 0;
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+.appstore-author {
+  margin: 0 0 18px 0;
+  color: #888;
+  font-size: 1.1rem;
+}
+.appstore-download-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.version-select {
+  font-size: 1rem;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafbfc;
+}
+.appstore-download-btn {
+  display: inline-block;
+  background: #007aff;
+  color: #fff;
+  padding: 10px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border: none;
+  transition: background 0.2s;
+}
+.appstore-download-btn:hover {
+  background: #005bb5;
+}
+.appstore-screenshots {
+  display: flex;
+  justify-content: flex-start;
+  gap: 18px;
+  max-width: 900px;
+  margin: 32px auto 0 auto;
+  padding-left: 152px;
+}
+.appstore-screenshot {
+  width: 180px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #ddd;
+  border: 1px solid #e0e0e0;
+}
+.appstore-description {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+.appstore-description h2 {
+  margin-top: 0;
+}
+.appstore-license {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+footer {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+} 

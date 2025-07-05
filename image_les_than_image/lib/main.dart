@@ -198,16 +198,15 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // クリアボタン
-                    if (_images.isNotEmpty)
-                      ElevatedButton.icon(
-                        onPressed: _clearImages,
-                        icon: const Icon(Icons.clear_all),
-                        label: const Text('一覧クリア'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red[100],
-                          foregroundColor: Colors.red[700],
-                        ),
+                    ElevatedButton.icon(
+                      onPressed: _images.isNotEmpty ? _clearImages : null,
+                      icon: const Icon(Icons.clear_all),
+                      label: const Text('一覧クリア'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[100],
+                        foregroundColor: Colors.red[700],
                       ),
+                    ),
 
                     // 圧縮ボタン
                     ElevatedButton.icon(

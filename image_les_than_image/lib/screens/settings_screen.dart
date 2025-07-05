@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Center(
         child: GlassmorphicContainer(
           width: 600,
-          height: 400,
+          height: 500,
           borderRadius: 24,
           blur: 20,
           alignment: Alignment.center,
@@ -70,26 +70,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // 圧縮品質設定
-                Text('圧縮品質: ${_settings.qualityMin}-${_settings.qualityMax}'),
-                RangeSlider(
-                  values: RangeValues(
-                    _settings.qualityMin.toDouble(),
-                    _settings.qualityMax.toDouble(),
-                  ),
-                  min: 0,
+                const Text(
+                  '圧縮品質',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Text('品質: ${_settings.quality}'),
+                Slider(
+                  value: _settings.quality.toDouble(),
+                  min: 1,
                   max: 100,
-                  divisions: 100,
-                  labels: RangeLabels(
-                    '${_settings.qualityMin}',
-                    '${_settings.qualityMax}',
-                  ),
-                  onChanged: (values) {
+                  divisions: 99,
+                  label: '${_settings.quality}',
+                  onChanged: (value) {
                     setState(() {
-                      _settings = _settings.copyWith(
-                        qualityMin: values.start.round(),
-                        qualityMax: values.end.round(),
-                      );
+                      _settings = _settings.copyWith(quality: value.round());
                     });
+                  },
+                ),
+
+                const SizedBox(height: 24),
+
+                // 色数設定
+                const Text(
+                  '色数',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<int>(
+                  value: _settings.colorCount,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 2, child: Text('2色')),
+                    DropdownMenuItem(value: 4, child: Text('4色')),
+                    DropdownMenuItem(value: 8, child: Text('8色')),
+                    DropdownMenuItem(value: 16, child: Text('16色')),
+                    DropdownMenuItem(value: 32, child: Text('32色')),
+                    DropdownMenuItem(value: 64, child: Text('64色')),
+                    DropdownMenuItem(value: 128, child: Text('128色')),
+                    DropdownMenuItem(value: 256, child: Text('256色')),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _settings = _settings.copyWith(colorCount: value);
+                      });
+                    }
                   },
                 ),
 

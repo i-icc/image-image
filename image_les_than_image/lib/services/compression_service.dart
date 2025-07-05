@@ -16,7 +16,7 @@ class CompressionService {
       print('=== 圧縮開始 ===');
       print('元ファイル: ${item.file.path}');
       print(
-        '圧縮設定: ${compressionSettings.qualityMin}-${compressionSettings.qualityMax}',
+        '圧縮設定: 品質=${compressionSettings.quality}, 色数=${compressionSettings.colorCount}',
       );
       print('上書き設定: ${compressionSettings.overwrite}');
 
@@ -85,7 +85,7 @@ class CompressionService {
   ) async {
     try {
       // 品質設定に基づいて圧縮
-      final quality = (settings.qualityMin + settings.qualityMax) / 2;
+      final quality = settings.quality.toDouble();
 
       // 画像の最適化
       img.Image optimizedImage = image;
@@ -95,10 +95,8 @@ class CompressionService {
         optimizedImage = optimizeTransparency(image);
       }
 
-      // 色数の削減（品質に応じて）
-      if (quality < 80) {
-        optimizedImage = reduceColors(optimizedImage, quality);
-      }
+      // 色数の削減（設定された色数に基づいて）
+      optimizedImage = reduceColors(optimizedImage, settings.colorCount);
 
       // PNGエンコード（圧縮レベルを調整）
       final compressedBytes = img.encodePng(
@@ -131,17 +129,9 @@ class CompressionService {
     return image;
   }
 
-  static img.Image reduceColors(img.Image image, double quality) {
-    // 品質に応じて色数を削減
-    final maxColors =
-        quality < 60
-            ? 64
-            : quality < 80
-            ? 128
-            : 256;
-
-    // パレット化（imageパッケージの正しいAPIを使用）
-    return img.quantize(image, numberOfColors: maxColors);
+  static img.Image reduceColors(img.Image image, int colorCount) {
+    // 設定された色数でパレット化
+    return img.quantize(image, numberOfColors: colorCount);
   }
 
   static int _getCompressionLevel(double quality) {
