@@ -32,6 +32,10 @@ class CompressionService {
 
       print('画像サイズ: ${image.width}x${image.height}');
 
+      // ファイル拡張子を取得
+      final extension = p.extension(item.file.path).toLowerCase();
+      final isJpeg = extension == '.jpg' || extension == '.jpeg';
+
       // 出力ファイルパスを決定
       final dir = item.file.parent;
       String outPath;
@@ -49,8 +53,13 @@ class CompressionService {
 
       print('出力ファイル: $outPath');
 
-      // PNG圧縮処理
-      final compressedBytes = await _compressPng(image, compressionSettings);
+      // ファイル形式に応じて圧縮処理を選択
+      Uint8List? compressedBytes;
+      if (isJpeg) {
+        compressedBytes = await _compressJpeg(image, compressionSettings);
+      } else {
+        compressedBytes = await _compressPng(image, compressionSettings);
+      }
 
       if (compressedBytes != null) {
         // 圧縮後のファイルを保存
@@ -76,6 +85,30 @@ class CompressionService {
       print('=== 圧縮エラー ===');
       print('エラー内容: $e');
       item.status = CompressStatus.error;
+    }
+  }
+
+  static Future<Uint8List?> _compressJpeg(
+    img.Image image,
+    CompressionSettings settings,
+  ) async {
+    try {
+      // JPEG品質を設定（1-100）
+      final quality = settings.quality;
+
+      // 画像の最適化
+      img.Image optimizedImage = image;
+
+      // 色数の削減（設定された色数に基づいて）
+      optimizedImage = reduceColors(optimizedImage, settings.colorCount);
+
+      // JPEGエンコード
+      final compressedBytes = img.encodeJpg(optimizedImage, quality: quality);
+
+      return compressedBytes;
+    } catch (e) {
+      print('JPEG圧縮エラー: $e');
+      return null;
     }
   }
 

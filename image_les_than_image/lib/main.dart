@@ -4,6 +4,7 @@ import 'dart:io';
 import 'models/image_item.dart';
 import 'models/compression_settings.dart';
 import 'services/compression_service.dart';
+import 'services/settings_service.dart';
 import 'widgets/drop_zone.dart';
 import 'widgets/image_list_item.dart';
 import 'widgets/progress_indicator.dart';
@@ -42,6 +43,25 @@ class _HomePageState extends State<HomePage> {
   bool _batchCompressing = false;
   CompressionSettings _settings = const CompressionSettings();
   double _overallProgress = 0.0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final settings = await SettingsService.loadSettings();
+    setState(() {
+      _settings = settings;
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _saveSettings(CompressionSettings settings) async {
+    await SettingsService.saveSettings(settings);
+  }
 
   void _addImages(List<File> files) {
     setState(() {
@@ -102,10 +122,11 @@ class _HomePageState extends State<HomePage> {
         builder:
             (context) => SettingsScreen(
               settings: _settings,
-              onSettingsChanged: (settings) {
+              onSettingsChanged: (settings) async {
                 setState(() {
                   _settings = settings;
                 });
+                await _saveSettings(settings);
               },
             ),
       ),
@@ -120,6 +141,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: Center(

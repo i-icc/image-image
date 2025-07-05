@@ -14,13 +14,20 @@ class DropZone extends StatefulWidget {
 class _DropZoneState extends State<DropZone> {
   bool _dragging = false;
 
+  bool _isImageFile(String path) {
+    final extension = path.toLowerCase();
+    return extension.endsWith('.png') ||
+        extension.endsWith('.jpg') ||
+        extension.endsWith('.jpeg');
+  }
+
   @override
   Widget build(BuildContext context) {
     return DropTarget(
       onDragDone: (detail) {
         widget.onFilesDropped(
           detail.files
-              .where((f) => f.path.endsWith('.png'))
+              .where((f) => _isImageFile(f.path))
               .map((f) => File(f.path))
               .toList(),
         );
@@ -48,7 +55,7 @@ class _DropZoneState extends State<DropZone> {
         ),
         child: Center(
           child: Text(
-            'ここにPNG画像をドラッグ＆ドロップ',
+            'ここに画像ファイル（PNG/JPG）をドラッグ＆ドロップ',
             style: TextStyle(
               fontSize: 20,
               color: _dragging ? Colors.blueAccent : Colors.black54,
