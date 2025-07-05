@@ -4,6 +4,32 @@ body {
   margin: 0;
   color: #222;
 }
+
+.language-switcher {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  max-width: 900px;
+  margin: 12px auto 0 auto;
+  padding: 0 16px;
+}
+
+.lang-btn {
+  display: inline-block;
+  text-decoration: none;
+  color: #999;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+
+.lang-btn:hover {
+  color: #666;
+}
+
+.lang-btn.active {
+  color: #333;
+  font-weight: 500;
+}
 .appstore-header {
   display: flex;
   align-items: flex-start;

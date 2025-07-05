@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMAGEimage - App Download</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    function updateDownloadLink() {
+      const version = document.getElementById('version-select').value;
+      const link = document.getElementById('download-link');
+      link.href = `assets/pkg/macos/IMAGEimage_${version}.zip`;
+      link.textContent = `Download for Mac (v${version})`;
+    }
+    window.addEventListener('DOMContentLoaded', updateDownloadLink);
+  </script>
+</head>
+<body>
+  <div class="language-switcher">
+    <a href="index.html" class="lang-btn">日本語</a>
+    <a href="en.html" class="lang-btn active">English</a>
+  </div>
+  <div class="appstore-header">
+    <img src="assets/images/dummy_icon.png" alt="IMAGEimage Icon" class="appstore-icon">
+    <div class="appstore-meta">
+      <h1 class="appstore-title">IMAGEimage</h1>
+      <p class="appstore-author">by <a href="https://i-icc.github.io/#/" target="_blank">i-icc/某猫</a></p>
+      <div class="appstore-download-block">
+        <select id="version-select" class="version-select" onchange="updateDownloadLink()">
+          <option value="0.0.1">v0.0.1 (Latest)</option>
+        </select>
+        <a id="download-link" class="appstore-download-btn" href="#">Download for Mac</a>
+      </div>
+    </div>
+  </div>
+  <div class="appstore-screenshots">
+    <img src="assets/images/dummy_ss1.png" alt="Screenshot 1" class="appstore-screenshot">
+    <img src="assets/images/dummy_ss2.png" alt="Screenshot 2" class="appstore-screenshot">
+    <img src="assets/images/dummy_ss3.png" alt="Screenshot 3" class="appstore-screenshot">
+  </div>
+  <div class="appstore-description">
+    <h2>App Overview</h2>
+    <p>IMAGEimage is a Flutter desktop application that allows you to easily compare and compress images. Add images with drag & drop, and perform intuitive compression and comparison of multiple images. Perfect for image management and file size reduction.</p>
+    <h3>Key Features</h3>
+    <ul>
+      <li>Drag & drop image addition</li>
+      <li>Batch compression of multiple images</li>
+      <li>Customizable compression settings</li>
+      <li>Image preview & comparison</li>
+    </ul>
+  </div>
+  <div class="appstore-license">
+    <h3>License</h3>
+    <p>IMAGEimage is Free Software released under the WTFPL License.</p>
+  </div>
+  <footer>
+    <p>&copy; 2025 i-icc/某猫</p>
+  </footer>
+</body>
+</html> 
