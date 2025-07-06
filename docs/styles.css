@@ -118,6 +118,36 @@ body {
   margin: 32px auto;
   padding: 0 16px;
 }
+.appstore-release-notes {
+  max-width: 900px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.release-info {
+  margin-bottom: 24px;
+}
+
+.release-date {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+}
+
+.release-title {
+  margin: 0 0 12px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.release-summary {
+  margin: 0;
+  color: #555;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
 .appstore-contact {
   max-width: 900px;
   margin: 32px auto;

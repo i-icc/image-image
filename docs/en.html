@@ -6,13 +6,51 @@
   <title>IMAGEimage - App Download</title>
   <link rel="stylesheet" href="styles.css">
   <script>
+    let releasesData = null;
+
+    async function loadReleases() {
+      try {
+        const response = await fetch('releases.json');
+        releasesData = await response.json();
+        updateVersionSelect();
+        updateDownloadLink();
+        updateReleaseNotes();
+      } catch (error) {
+        console.error('Failed to load release data:', error);
+      }
+    }
+
+    function updateVersionSelect() {
+      const select = document.getElementById('version-select');
+      select.innerHTML = '';
+      
+      releasesData.releases.forEach(release => {
+        const option = document.createElement('option');
+        option.value = release.version;
+        option.textContent = `v${release.version}${release.isLatest ? ' (Latest)' : ''}`;
+        select.appendChild(option);
+      });
+    }
+
     function updateDownloadLink() {
       const version = document.getElementById('version-select').value;
       const link = document.getElementById('download-link');
       link.href = `assets/pkg/macos/IMAGEimage_${version}.dmg`;
       link.textContent = `Download for Mac (v${version})`;
     }
-    window.addEventListener('DOMContentLoaded', updateDownloadLink);
+
+    function updateReleaseNotes() {
+      const version = document.getElementById('version-select').value;
+      const release = releasesData.releases.find(r => r.version === version);
+      
+      if (release) {
+        const notes = release.notes.en;
+        const summary = `${release.date} v${release.version} - ${notes.description}`;
+        document.getElementById('release-summary').textContent = summary;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadReleases);
   </script>
 </head>
 <body>
@@ -26,7 +64,7 @@
       <h1 class="appstore-title">IMAGEimage</h1>
       <p class="appstore-author">by <a href="https://i-icc.github.io/#/" target="_blank">i-icc/某猫</a></p>
       <div class="appstore-download-block">
-        <select id="version-select" class="version-select" onchange="updateDownloadLink()">
+        <select id="version-select" class="version-select" onchange="updateDownloadLink(); updateReleaseNotes();">
           <option value="0.1.0">v0.1.0 (Latest)</option>
         </select>
         <a id="download-link" class="appstore-download-btn" href="#">Download for Mac</a>
@@ -48,6 +86,12 @@
       <li>Customizable compression settings</li>
       <li>Image preview & comparison</li>
     </ul>
+  </div>
+  <div class="appstore-release-notes">
+    <h3>Release Notes</h3>
+    <div class="release-info">
+      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - Initial release of IMAGEimage. Add images with drag & drop and perform batch compression of multiple images. Provides PNG 24bit/32bit to 8bit indexed color conversion functionality.</p>
+    </div>
   </div>
   <div class="appstore-license">
     <h3>License</h3>

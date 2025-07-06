@@ -6,13 +6,51 @@
   <title>IMAGEimage - アプリダウンロード</title>
   <link rel="stylesheet" href="styles.css">
   <script>
+    let releasesData = null;
+
+    async function loadReleases() {
+      try {
+        const response = await fetch('releases.json');
+        releasesData = await response.json();
+        updateVersionSelect();
+        updateDownloadLink();
+        updateReleaseNotes();
+      } catch (error) {
+        console.error('リリースデータの読み込みに失敗しました:', error);
+      }
+    }
+
+    function updateVersionSelect() {
+      const select = document.getElementById('version-select');
+      select.innerHTML = '';
+      
+      releasesData.releases.forEach(release => {
+        const option = document.createElement('option');
+        option.value = release.version;
+        option.textContent = `v${release.version}${release.isLatest ? '（最新）' : ''}`;
+        select.appendChild(option);
+      });
+    }
+
     function updateDownloadLink() {
       const version = document.getElementById('version-select').value;
       const link = document.getElementById('download-link');
       link.href = `assets/pkg/macos/IMAGEimage_${version}.dmg`;
       link.textContent = `Mac版ダウンロード（v${version}）`;
     }
-    window.addEventListener('DOMContentLoaded', updateDownloadLink);
+
+    function updateReleaseNotes() {
+      const version = document.getElementById('version-select').value;
+      const release = releasesData.releases.find(r => r.version === version);
+      
+      if (release) {
+        const notes = release.notes.ja;
+        const summary = `${release.date} v${release.version} - ${notes.description}`;
+        document.getElementById('release-summary').textContent = summary;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadReleases);
   </script>
 </head>
 <body>
@@ -26,7 +64,7 @@
       <h1 class="appstore-title">IMAGEimage</h1>
       <p class="appstore-author">by <a href="https://i-icc.github.io/#/" target="_blank">i-icc/某猫</a></p>
       <div class="appstore-download-block">
-        <select id="version-select" class="version-select" onchange="updateDownloadLink()">
+        <select id="version-select" class="version-select" onchange="updateDownloadLink(); updateReleaseNotes();">
           <option value="0.1.0">v0.1.0（最新）</option>
         </select>
         <a id="download-link" class="appstore-download-btn" href="#">Mac版ダウンロード</a>
@@ -48,6 +86,12 @@
       <li>圧縮設定のカスタマイズ</li>
       <li>画像のプレビュー＆比較</li>
     </ul>
+  </div>
+  <div class="appstore-release-notes">
+    <h3>リリースノート</h3>
+    <div class="release-info">
+      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - IMAGEimageの初回リリース。ドラッグ＆ドロップで画像を追加し、複数画像の一括圧縮が可能。PNG形式の24bit/32bitから8bitインデックスカラーへの変換機能を提供。</p>
+    </div>
   </div>
   <div class="appstore-license">
     <h3>ライセンス</h3>
