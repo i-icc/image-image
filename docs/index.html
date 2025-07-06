@@ -14,7 +14,6 @@
         releasesData = await response.json();
         updateVersionSelect();
         updateDownloadLink();
-        updateReleaseNotes();
       } catch (error) {
         console.error('リリースデータの読み込みに失敗しました:', error);
       }
@@ -39,17 +38,6 @@
       link.textContent = `Mac版ダウンロード（v${version}）`;
     }
 
-    function updateReleaseNotes() {
-      const version = document.getElementById('version-select').value;
-      const release = releasesData.releases.find(r => r.version === version);
-      
-      if (release) {
-        const notes = release.notes.ja;
-        const summary = `${release.date} v${release.version} - ${notes.description}`;
-        document.getElementById('release-summary').textContent = summary;
-      }
-    }
-
     window.addEventListener('DOMContentLoaded', loadReleases);
   </script>
 </head>
@@ -64,7 +52,7 @@
       <h1 class="appstore-title">PNGpng</h1>
       <p class="appstore-author">by <a href="https://i-icc.github.io/#/" target="_blank">i-icc/某猫</a></p>
       <div class="appstore-download-block">
-        <select id="version-select" class="version-select" onchange="updateDownloadLink(); updateReleaseNotes();">
+        <select id="version-select" class="version-select" onchange="updateDownloadLink();">
           <option value="0.1.0">v0.1.0（最新）</option>
         </select>
         <a id="download-link" class="appstore-download-btn" href="#">Mac版ダウンロード</a>
@@ -90,7 +78,7 @@
   <div class="appstore-release-notes">
     <h3>リリースノート</h3>
     <div class="release-info">
-      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - IMAGEimageの初回リリース。ドラッグ＆ドロップで画像を追加し、複数画像の一括圧縮が可能。PNG形式の24bit/32bitから8bitインデックスカラーへの変換機能を提供。</p>
+      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - IMAGEimageの初回リリース。基本的な複数画像の一括圧縮を提供。macOSのみ対応。</p>
     </div>
   </div>
   <div class="appstore-license">

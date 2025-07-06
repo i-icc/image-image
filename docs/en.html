@@ -14,7 +14,6 @@
         releasesData = await response.json();
         updateVersionSelect();
         updateDownloadLink();
-        updateReleaseNotes();
       } catch (error) {
         console.error('Failed to load release data:', error);
       }
@@ -37,17 +36,6 @@
       const link = document.getElementById('download-link');
       link.href = `assets/pkg/macos/PNGpng_${version}.dmg`;
       link.textContent = `Download for Mac (v${version})`;
-    }
-
-    function updateReleaseNotes() {
-      const version = document.getElementById('version-select').value;
-      const release = releasesData.releases.find(r => r.version === version);
-      
-      if (release) {
-        const notes = release.notes.en;
-        const summary = `${release.date} v${release.version} - ${notes.description}`;
-        document.getElementById('release-summary').textContent = summary;
-      }
     }
 
     window.addEventListener('DOMContentLoaded', loadReleases);
@@ -90,7 +78,7 @@
   <div class="appstore-release-notes">
     <h3>Release Notes</h3>
     <div class="release-info">
-      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - Initial release of PNGpng. Add images with drag & drop and perform batch compression of multiple images. Provides PNG 24bit/32bit to 8bit indexed color conversion functionality.</p>
+      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - First release of IMAGEimage. Provides basic batch compression of multiple images. Only macOS is supported.</p>
     </div>
   </div>
   <div class="appstore-license">
