@@ -6,10 +6,10 @@
       "isLatest": true,
       "notes": {
         "ja": {
-          "description": "初回リリース。基本的な複数画像の一括圧縮を提供。macOSのみ対応。"
+          "description": "IMAGEimageの初回リリース。基本的な複数画像の一括圧縮を提供。macOSのみ対応。"
         },
         "en": {
-          "description": "Initial release. Provides basic batch compression of multiple images. Only macOS is supported."
+          "description": "Initial release of IMAGEimage. Provides basic batch compression of multiple images. Only macOS is supported."
         }
       }
     }

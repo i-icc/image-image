@@ -1,5 +1,5 @@
 # image_les_than_image
-title: IMAGEimage
+title: PNGpng
 画像圧縮PCソフト。
 
 ## 仕様

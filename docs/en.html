@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IMAGEimage - App Download</title>
+  <title>PNGpng - App Download</title>
   <link rel="stylesheet" href="styles.css">
   <script>
     let releasesData = null;
@@ -35,7 +35,7 @@
     function updateDownloadLink() {
       const version = document.getElementById('version-select').value;
       const link = document.getElementById('download-link');
-      link.href = `assets/pkg/macos/IMAGEimage_${version}.dmg`;
+      link.href = `assets/pkg/macos/PNGpng_${version}.dmg`;
       link.textContent = `Download for Mac (v${version})`;
     }
 
@@ -59,9 +59,9 @@
     <a href="en.html" class="lang-btn active">English</a>
   </div>
   <div class="appstore-header">
-    <img src="assets/images/app_icon_512.png" alt="IMAGEimage Icon" class="appstore-icon">
+    <img src="assets/images/app_icon_512.png" alt="PNGpng Icon" class="appstore-icon">
     <div class="appstore-meta">
-      <h1 class="appstore-title">IMAGEimage</h1>
+      <h1 class="appstore-title">PNGpng</h1>
       <p class="appstore-author">by <a href="https://i-icc.github.io/#/" target="_blank">i-icc/某猫</a></p>
       <div class="appstore-download-block">
         <select id="version-select" class="version-select" onchange="updateDownloadLink(); updateReleaseNotes();">
@@ -78,7 +78,7 @@
   </div>
   <div class="appstore-description">
     <h2>App Overview</h2>
-    <p>IMAGEimage is a Flutter desktop application that allows you to easily compare and compress images. Add images with drag & drop, and perform intuitive compression and comparison of multiple images. Perfect for image management and file size reduction.</p>
+    <p>PNGpng is a Flutter desktop application that allows you to easily compare and compress images. Add images with drag & drop, and perform intuitive compression and comparison of multiple images. Perfect for image management and file size reduction.</p>
     <h3>Key Features</h3>
     <ul>
       <li>Drag & drop image addition</li>
@@ -90,12 +90,12 @@
   <div class="appstore-release-notes">
     <h3>Release Notes</h3>
     <div class="release-info">
-      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - Initial release of IMAGEimage. Add images with drag & drop and perform batch compression of multiple images. Provides PNG 24bit/32bit to 8bit indexed color conversion functionality.</p>
+      <p id="release-summary" class="release-summary">2025-07-06 v0.1.0 - Initial release of PNGpng. Add images with drag & drop and perform batch compression of multiple images. Provides PNG 24bit/32bit to 8bit indexed color conversion functionality.</p>
     </div>
   </div>
   <div class="appstore-license">
     <h3>License</h3>
-    <p>IMAGEimage is Free Software released under the WTFPL License.</p>
+    <p>PNGpng is Free Software released under the WTFPL License.</p>
   </div>
   <div class="appstore-contact">
     <h3>Contact</h3>
