@@ -60,129 +60,152 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '圧縮設定',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 24),
-
-                // 圧縮品質設定
-                const Text(
-                  '圧縮品質',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                Text('品質: ${_settings.quality}'),
-                Slider(
-                  value: _settings.quality.toDouble(),
-                  min: 1,
-                  max: 100,
-                  divisions: 99,
-                  label: '${_settings.quality}',
-                  onChanged: (value) {
-                    setState(() {
-                      _settings = _settings.copyWith(quality: value.round());
-                    });
-                  },
-                ),
-
-                const SizedBox(height: 24),
-
-                // 色数設定
-                const Text(
-                  '色数',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<int>(
-                  value: _settings.colorCount,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '圧縮設定',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: 2, child: Text('2色')),
-                    DropdownMenuItem(value: 4, child: Text('4色')),
-                    DropdownMenuItem(value: 8, child: Text('8色')),
-                    DropdownMenuItem(value: 16, child: Text('16色')),
-                    DropdownMenuItem(value: 32, child: Text('32色')),
-                    DropdownMenuItem(value: 64, child: Text('64色')),
-                    DropdownMenuItem(value: 128, child: Text('128色')),
-                    DropdownMenuItem(value: 256, child: Text('256色')),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        _settings = _settings.copyWith(colorCount: value);
-                      });
-                    }
-                  },
-                ),
+                  const SizedBox(height: 24),
 
-                const SizedBox(height: 24),
-
-                // 出力先設定
-                const Text(
-                  '出力設定',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-
-                // 上書き設定
-                SwitchListTile(
-                  title: const Text('既存ファイルを上書き'),
-                  value: _settings.overwrite,
-                  onChanged: (value) {
-                    setState(() {
-                      _settings = _settings.copyWith(overwrite: value);
-                    });
-                  },
-                ),
-
-                // プレフィックス設定（上書きが無効な時のみ表示）
-                if (!_settings.overwrite)
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: '出力ファイルプレフィックス',
-                      hintText: 'compressed_',
-                    ),
-                    controller: TextEditingController(
-                      text: _settings.outputPrefix,
-                    ),
+                  // 圧縮品質設定
+                  const Text(
+                    '圧縮品質',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('品質: ${_settings.quality}'),
+                  Slider(
+                    value: _settings.quality.toDouble(),
+                    min: 1,
+                    max: 100,
+                    divisions: 99,
+                    label: '${_settings.quality}',
                     onChanged: (value) {
                       setState(() {
-                        _settings = _settings.copyWith(outputPrefix: value);
+                        _settings = _settings.copyWith(quality: value.round());
                       });
                     },
                   ),
 
-                const SizedBox(height: 32),
+                  const SizedBox(height: 24),
 
-                // 保存ボタン
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('キャンセル'),
+                  // 色数設定
+                  const Text(
+                    '色数',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<int>(
+                    value: _settings.colorCount,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                     ),
-                    const SizedBox(width: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        widget.onSettingsChanged(_settings);
-                        Navigator.pop(context);
+                    items: const [
+                      DropdownMenuItem(value: 2, child: Text('2色')),
+                      DropdownMenuItem(value: 4, child: Text('4色')),
+                      DropdownMenuItem(value: 8, child: Text('8色')),
+                      DropdownMenuItem(value: 16, child: Text('16色')),
+                      DropdownMenuItem(value: 32, child: Text('32色')),
+                      DropdownMenuItem(value: 64, child: Text('64色')),
+                      DropdownMenuItem(value: 128, child: Text('128色')),
+                      DropdownMenuItem(value: 256, child: Text('256色')),
+                      DropdownMenuItem(value: -1, child: Text('減色なし')),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _settings = _settings.copyWith(colorCount: value);
+                        });
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // 出力先設定
+                  const Text(
+                    '出力設定',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // 上書き設定
+                  SwitchListTile(
+                    title: const Text('既存ファイルを上書き'),
+                    value: _settings.overwrite,
+                    onChanged: (value) async {
+                      if (!value) {
+                        // オフにしようとした場合はダイアログを表示し、状態を変更しない
+                        await showDialog(
+                          context: context,
+                          builder:
+                              (context) => AlertDialog(
+                                title: const Text('お知らせ'),
+                                content: const Text('今は使用できません！'),
+                                actions: [
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.of(context).pop(),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                        );
+                        return;
+                      }
+                      // オンにする場合のみ状態を変更
+                      setState(() {
+                        _settings = _settings.copyWith(overwrite: value);
+                      });
+                    },
+                  ),
+
+                  // プレフィックス設定（上書きが無効な時のみ表示）
+                  if (!_settings.overwrite)
+                    TextField(
+                      decoration: const InputDecoration(
+                        labelText: '出力ファイルプレフィックス',
+                        hintText: 'compressed_',
+                      ),
+                      controller: TextEditingController(
+                        text: _settings.outputPrefix,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _settings = _settings.copyWith(outputPrefix: value);
+                        });
                       },
-                      child: const Text('保存'),
                     ),
-                  ],
-                ),
-              ],
+
+                  const SizedBox(height: 32),
+
+                  // 保存ボタン
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('キャンセル'),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          widget.onSettingsChanged(_settings);
+                          Navigator.pop(context);
+                        },
+                        child: const Text('保存'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

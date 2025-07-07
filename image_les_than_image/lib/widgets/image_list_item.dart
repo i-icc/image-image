@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import '../models/image_item.dart';
+import 'dart:typed_data';
 
 class ImageListItem extends StatelessWidget {
   final ImageItem item;
@@ -37,7 +38,7 @@ class ImageListItem extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '元画像: ${item.name}',
+                            '画像比較: ${item.name}',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -51,45 +52,68 @@ class ImageListItem extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // 画像表示エリア
+                  // 画像比較エリア
                   Expanded(
-                    child: Container(
+                    child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: InteractiveViewer(
-                        child: Image.file(
-                          item.file,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.image_not_supported,
-                                      size: 64,
-                                      color: Colors.grey,
+                      child: Row(
+                        children: [
+                          // 元画像
+                          Expanded(
+                            child: _PreviewWithCheckerboard(
+                              label: '元画像',
+                              image: Image.file(item.file, fit: BoxFit.contain),
+                            ),
+                          ),
+                          const VerticalDivider(width: 32),
+                          // 圧縮後画像
+                          Expanded(
+                            child:
+                                item.hasCompressedFile &&
+                                        item.status == CompressStatus.done
+                                    ? FutureBuilder<Uint8List>(
+                                      future:
+                                          item.compressedFile!.readAsBytes(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                        if (!snapshot.hasData ||
+                                            snapshot.hasError) {
+                                          return Center(
+                                            child: Text(
+                                              '画像を読み込めませんでした',
+                                              style: TextStyle(
+                                                color: Colors.grey[500],
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        return _PreviewWithCheckerboard(
+                                          label: '圧縮後',
+                                          image: Image.memory(
+                                            snapshot.data!,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                    : Center(
+                                      child: Text(
+                                        '圧縮画像なし',
+                                        style: TextStyle(
+                                          color: Colors.grey[500],
+                                        ),
+                                      ),
                                     ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      '画像を読み込めませんでした',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-
                   // 情報表示
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -104,9 +128,19 @@ class ImageListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'ファイルサイズ: ${(item.file.lengthSync() / 1024).toStringAsFixed(1)} KB',
+                          '元: ${(item.originalSize ?? item.file.lengthSync()) / 1024} KB',
                         ),
+                        if (item.compressedSize != null)
+                          Text(
+                            '圧縮後: ${(item.compressedSize! / 1024).toStringAsFixed(1)} KB',
+                          ),
+                        if (item.compressionRate != null)
+                          Text(
+                            '圧縮率: ${(item.compressionRate! * 100).toStringAsFixed(1)}%',
+                          ),
                         Text('パス: ${item.file.path}'),
+                        if (item.compressedFilePath != null)
+                          Text('圧縮後パス: ${item.compressedFilePath}'),
                       ],
                     ),
                   ),
@@ -215,4 +249,55 @@ class ImageListItem extends StatelessWidget {
       ),
     );
   }
+}
+
+// 画像の格子背景＋ラベル付きプレビューWidget
+class _PreviewWithCheckerboard extends StatelessWidget {
+  final String label;
+  final Widget image;
+  const _PreviewWithCheckerboard({required this.label, required this.image});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Expanded(
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                CustomPaint(painter: _CheckerboardPainter()),
+                Center(child: image),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// 格子模様を描画するCustomPainter
+class _CheckerboardPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const double squareSize = 16;
+    final paint1 = Paint()..color = const Color(0xFFE0E0E0);
+    final paint2 = Paint()..color = const Color(0xFFFFFFFF);
+    for (int y = 0; y < size.height / squareSize; y++) {
+      for (int x = 0; x < size.width / squareSize; x++) {
+        final paint = (x + y) % 2 == 0 ? paint1 : paint2;
+        canvas.drawRect(
+          Rect.fromLTWH(x * squareSize, y * squareSize, squareSize, squareSize),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
