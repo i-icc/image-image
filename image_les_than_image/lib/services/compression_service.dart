@@ -123,11 +123,12 @@ class CompressionService {
       // 画像の最適化
       img.Image optimizedImage = image;
 
-      // 透明度を持つ画像は、ピクセル操作で透明度を損なう可能性があるため、
-      // 色数の削減を行わないようにする
-      if (!hasTransparency(image)) {
-        // 色数の削減（設定された色数に基づいて）
-        optimizedImage = reduceColors(optimizedImage, settings.colorCount);
+      // 色数の削減（設定された色数に基づいて）
+      optimizedImage = reduceColors(optimizedImage, settings.colorCount);
+
+      // 透明度を復元
+      if (hasTransparency(image)) {
+        optimizedImage = restoreTransparency(image, optimizedImage);
       }
 
       // PNGエンコード（圧縮レベルを調整）
@@ -141,6 +142,22 @@ class CompressionService {
       print('PNG圧縮エラー: $e');
       return null;
     }
+  }
+
+  static img.Image restoreTransparency(
+      img.Image originalImage, img.Image modifiedImage) {
+    if (originalImage.width != modifiedImage.width ||
+        originalImage.height != modifiedImage.height) {
+      return modifiedImage; // Or throw an error
+    }
+
+    for (final modifiedPixel in modifiedImage) {
+      final originalPixel =
+          originalImage.getPixel(modifiedPixel.x, modifiedPixel.y);
+      modifiedPixel.a = originalPixel.a;
+    }
+
+    return modifiedImage;
   }
 
   static bool hasTransparency(img.Image image) {
