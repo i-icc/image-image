@@ -123,13 +123,12 @@ class CompressionService {
       // 画像の最適化
       img.Image optimizedImage = image;
 
-      // 透明度の最適化
-      if (hasTransparency(image)) {
-        optimizedImage = optimizeTransparency(image);
+      // 透明度を持つ画像は、ピクセル操作で透明度を損なう可能性があるため、
+      // 色数の削減を行わないようにする
+      if (!hasTransparency(image)) {
+        // 色数の削減（設定された色数に基づいて）
+        optimizedImage = reduceColors(optimizedImage, settings.colorCount);
       }
-
-      // 色数の削減（設定された色数に基づいて）
-      optimizedImage = reduceColors(optimizedImage, settings.colorCount);
 
       // PNGエンコード（圧縮レベルを調整）
       final compressedBytes = img.encodePng(
@@ -155,11 +154,6 @@ class CompressionService {
       }
     }
     return false;
-  }
-
-  static img.Image optimizeTransparency(img.Image image) {
-    // 透明度の最適化（現状はそのまま返す）
-    return image;
   }
 
   static img.Image reduceColors(img.Image image, int colorCount) {
